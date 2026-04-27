@@ -1,0 +1,819 @@
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+
+@source '../../../../app/Filament/**/*';
+@source '../../../../app/Livewire/**/*';
+@source '../../../../resources/views/filament/**/*';
+@source '../../../../resources/views/livewire/**/*';
+
+/* -----------------------------------------------------------------------------
+ * ADMINOS — Liquid Glass theme
+ * Palette: 0085FE primary · 232934 surface · A4A7AA paragraph · F1F1F1 heading
+ *          22C55E success · EB4143 danger · F4B301 warning · 7643CD accent
+ * ---------------------------------------------------------------------------*/
+
+@theme {
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Inter', 'SF Pro Display',
+        'Segoe UI', system-ui, ui-sans-serif, 'Helvetica Neue', Arial, sans-serif;
+
+    --tracking-tight: -0.02em;
+    --tracking-tighter: -0.025em;
+
+    --radius-sm: 0.5rem;
+    --radius-md: 0.625rem;
+    --radius-lg: 0.875rem;
+    --radius-xl: 1.125rem;
+    --radius-2xl: 1.375rem;
+
+    --ease-apple: cubic-bezier(0.16, 1, 0.3, 1);
+
+    --glass-light-bg: rgba(255, 255, 255, 0.6);
+    --glass-light-bg-strong: rgba(255, 255, 255, 0.78);
+    --glass-light-border: rgba(15, 23, 42, 0.08);
+    --glass-light-border-strong: rgba(15, 23, 42, 0.14);
+    --glass-light-overlay: rgba(15, 23, 42, 0.04);
+
+    --glass-dark-bg: rgba(1, 1, 1, 0.55);          /* #0101018c */
+    --glass-dark-bg-strong: rgba(1, 1, 1, 0.78);
+    --glass-dark-border: rgba(255, 255, 255, 0.08);
+    --glass-dark-border-strong: rgba(255, 255, 255, 0.18);
+    --glass-dark-overlay: rgba(255, 255, 255, 0.05);
+
+    --adminos-accent: #7643CD;
+}
+
+/* =============================================================================
+ * DARK MODE PALETTE SWITCH — primary turns red.
+ *
+ * Light keeps Filament's azure blue (`#0085FE`). In dark, Filament's
+ * `--primary-50…950` scale is overridden with the palette red `#EB4143`
+ * scale, which auto-recolours every primary-* utility class (buttons,
+ * active links, focus rings, badges, table actions, …).
+ *
+ * Pure CSS — no PHP / panel config touched.
+ * =============================================================================*/
+
+.dark {
+    /* Primary palette is emitted per-request in dynamic-theme.blade.php
+       so the active scheme drives every primary-* utility class. */
+
+    /* Gray: pure neutral (hue 0) instead of Filament's slate (hue ~257) —
+       kills the blue undertone in dark surfaces, dropdowns, inputs, search,
+       footer and table chrome. Tailwind v4 `neutral` palette. */
+    --gray-50: oklch(98.5% 0 0);
+    --gray-100: oklch(97% 0 0);
+    --gray-200: oklch(92.2% 0 0);
+    --gray-300: oklch(87% 0 0);
+    --gray-400: oklch(70.8% 0 0);
+    --gray-500: oklch(55.6% 0 0);
+    --gray-600: oklch(43.9% 0 0);
+    --gray-700: oklch(37.1% 0 0);
+    --gray-800: oklch(26.9% 0 0);
+    --gray-900: oklch(20.5% 0 0);
+    --gray-950: oklch(14.5% 0 0);
+}
+
+/* Make sure focus rings on inputs sit at primary-500 (cycles with scheme too). */
+.fi-input-wrp:focus-within {
+    box-shadow:
+        0 0 0 3px rgb(from var(--primary-500) r g b / 0.18) !important;
+}
+
+/* =============================================================================
+ * BODY GRADIENT
+ *
+ * Body background colour and the radial blob layer are emitted dynamically
+ * from `filament/dynamic-theme.blade.php` based on the active scheme. The
+ * dot pattern overlay below stays static.
+ * =============================================================================*/
+
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+        radial-gradient(circle, rgba(15, 23, 42, 0.05) 1px, transparent 1px);
+    background-size: 28px 28px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.dark body::before {
+    background-image:
+        radial-gradient(circle, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+}
+
+/* Filament chrome above the dot pattern. NB: do NOT pin `.fi-topbar-ctn`
+   to a low z-index — that creates a stacking context which traps the
+   collapse button under the sidebar's hairline border. We need the
+   collapse button (z: 50, position: fixed) to live at the document root. */
+.fi-layout,
+.fi-main-ctn {
+    position: relative;
+}
+
+.fi-sidebar {
+    z-index: 20;
+}
+
+/* =============================================================================
+ * TOPBAR — sticky, fixed 4rem height, liquid glass.
+ *
+ * Filament default expects 4rem; locking it explicitly stops the user-display
+ * block from inflating the topbar and pushing the sidebar's `top: 4rem` out
+ * of alignment (which was the gap Jakub reported).
+ * =============================================================================*/
+
+.fi-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    height: 4rem;
+    min-height: 4rem;
+    background: rgb(255 255 255);
+    border-bottom: 1px solid var(--glass-light-border);
+}
+
+.dark .fi-topbar {
+    background: rgb(0 0 0);
+    border-bottom: 1px solid var(--glass-dark-border);
+}
+
+.fi-topbar-start {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Force sidebar to anchor exactly under the 4rem topbar. */
+.fi-body-has-topbar .fi-sidebar {
+    top: 4rem !important;
+    height: calc(100dvh - 4rem) !important;
+}
+
+/* =============================================================================
+ * SIDEBAR — liquid glass, no top gap.
+ * =============================================================================*/
+
+.fi-sidebar {
+    background: var(--glass-light-bg);
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    border-right: 1px solid var(--glass-light-border);
+}
+
+.dark .fi-sidebar {
+    background: var(--glass-dark-bg);
+    border-right: 1px solid var(--glass-dark-border);
+}
+
+.fi-body-has-topbar .fi-sidebar-header,
+.fi-body-has-topbar .fi-sidebar-header-ctn {
+    padding-block: 0;
+}
+
+.fi-sidebar-nav {
+    padding-block-start: 0.75rem;
+}
+
+.fi-sidebar-item-btn {
+    border-radius: var(--radius-md);
+    transition: background-color 220ms var(--ease-apple);
+}
+
+.fi-sidebar-item-btn:hover {
+    background-color: var(--glass-light-overlay);
+}
+
+.dark .fi-sidebar-item-btn:hover {
+    background-color: var(--glass-dark-overlay);
+}
+
+/* =============================================================================
+ * MAIN CANVAS — transparent so the body gradient shows through.
+ * =============================================================================*/
+
+.fi-main,
+.fi-main-ctn,
+.dark .fi-main,
+.dark .fi-main-ctn {
+    background-color: transparent;
+}
+
+/* =============================================================================
+ * COLLAPSE BUTTON — small square pinned to the sidebar's right edge.
+ *
+ * Behaviour:
+ * • Sidebar OPEN  → btn is invisible by default, fades in on sidebar hover
+ *                   (or hover on the btn itself).
+ * • Sidebar COLLAPSED → btn is always visible (signals expansion is possible).
+ *
+ * Position follows the sidebar edge dynamically using `:has()` to detect
+ * `.fi-sidebar-open` / `:not(.fi-sidebar-open)` and switching `left` between
+ * `--sidebar-width` and `--collapsed-sidebar-width`.
+ * =============================================================================*/
+
+.fi-topbar-collapse-sidebar-btn-ctn {
+    position: fixed;
+    top: 5.5rem;
+    left: var(--sidebar-width);
+    transform: translateX(-50%);
+    margin: 0;
+    z-index: 60;
+    opacity: 0;
+    transition: opacity 220ms var(--ease-apple),
+        left 300ms var(--ease-apple);
+}
+
+/* Follow sidebar edge when collapsed, and stay visible. Nudge right of the
+   collapsed icons so the chevron doesn't crowd the icon column. */
+body:has(.fi-sidebar:not(.fi-sidebar-open)) .fi-topbar-collapse-sidebar-btn-ctn {
+    left: calc(var(--collapsed-sidebar-width, 4.5rem) + 0.625rem);
+    transform: translateX(0);
+    opacity: 1;
+}
+
+/* Reveal on sidebar hover when open, or when hovering the button itself. */
+body:has(.fi-sidebar.fi-sidebar-open:hover) .fi-topbar-collapse-sidebar-btn-ctn,
+.fi-topbar-collapse-sidebar-btn-ctn:hover {
+    opacity: 1;
+}
+
+.fi-topbar-collapse-sidebar-btn-ctn .fi-icon-btn {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--glass-light-border-strong);
+    background: var(--glass-light-bg-strong);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08), 0 2px 6px rgba(15, 23, 42, 0.06);
+    transition: background-color 220ms var(--ease-apple),
+        border-color 220ms var(--ease-apple),
+        transform 220ms var(--ease-apple);
+}
+
+.fi-topbar-collapse-sidebar-btn-ctn .fi-icon-btn:hover {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: var(--primary-600);
+}
+
+.fi-topbar-collapse-sidebar-btn-ctn .fi-icon-btn:active {
+    transform: scale(0.92);
+}
+
+.dark .fi-topbar-collapse-sidebar-btn-ctn .fi-icon-btn {
+    background: var(--glass-dark-bg-strong);
+    border-color: var(--glass-dark-border-strong);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.dark .fi-topbar-collapse-sidebar-btn-ctn .fi-icon-btn:hover {
+    background: rgba(1, 1, 1, 0.95);
+    border-color: var(--primary-600);
+}
+
+/* Make icon a touch smaller to fit the square nicely. */
+.fi-topbar-collapse-sidebar-btn-ctn .fi-icon-btn .fi-icon {
+    width: 0.875rem;
+    height: 0.875rem;
+}
+
+/* =============================================================================
+ * Custom topbar widgets (datum/čas, počasí) — plain text.
+ * =============================================================================*/
+
+.adminos-topbar-widgets {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-inline-start: 1.25rem;
+}
+
+@media (max-width: 768px) {
+    .adminos-topbar-widgets {
+        display: none;
+    }
+}
+
+.adminos-topbar-widget {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: rgb(71 85 105);
+    background: transparent;
+    border: none;
+    transition: color 220ms var(--ease-apple);
+}
+
+.adminos-topbar-widget:hover {
+    color: rgb(15 23 42);
+}
+
+.dark .adminos-topbar-widget {
+    color: rgb(164 167 170); /* #A4A7AA paragraph */
+}
+
+.dark .adminos-topbar-widget:hover {
+    color: rgb(241 241 241); /* #F1F1F1 heading */
+}
+
+.adminos-topbar-widget__icon,
+.adminos-topbar-widget__icon-placeholder {
+    width: 1rem;
+    height: 1rem;
+    flex: none;
+    color: currentColor;
+    opacity: 0.7;
+}
+
+.adminos-topbar-widget--weather .adminos-topbar-widget__icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    opacity: 1;
+}
+
+.adminos-topbar-widget__value {
+    font-weight: 600;
+    color: rgb(15 23 42);
+    letter-spacing: var(--tracking-tight);
+}
+
+.dark .adminos-topbar-widget__value {
+    color: rgb(241 241 241);
+}
+
+.adminos-topbar-widget__separator {
+    opacity: 0.4;
+    font-weight: 400;
+}
+
+/* =============================================================================
+ * USER MENU TRIGGER — full block: [avatar] [Name / role].
+ * Lives inside Filament's overridden user-menu.blade.php so the whole row is
+ * one click target opening the dropdown (profile / theme / logout).
+ * =============================================================================*/
+
+.adminos-user-menu-trigger.fi-user-menu-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.25rem 0.375rem 0.25rem 0.25rem;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: background-color 220ms var(--ease-apple);
+}
+
+.adminos-user-menu-trigger.fi-user-menu-trigger:hover {
+    background-color: var(--glass-light-overlay);
+}
+
+.dark .adminos-user-menu-trigger.fi-user-menu-trigger:hover {
+    background-color: var(--glass-dark-overlay);
+}
+
+.adminos-user-display {
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1.2;
+    text-align: left;
+}
+
+@media (min-width: 768px) {
+    .adminos-user-display {
+        display: flex;
+    }
+}
+
+.adminos-user-display__name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: rgb(35 41 52); /* #232934 */
+    letter-spacing: var(--tracking-tight);
+}
+
+.dark .adminos-user-display__name {
+    color: rgb(241 241 241); /* #F1F1F1 */
+}
+
+.adminos-user-display__role {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: rgb(100 116 139);
+    margin-top: 0.0625rem;
+}
+
+.dark .adminos-user-display__role {
+    color: rgb(164 167 170); /* #A4A7AA */
+}
+
+/* =============================================================================
+ * Sections / cards / stats / tables / inputs — liquid glass.
+ * =============================================================================*/
+
+.fi-section,
+.fi-wi-stats-overview-stat,
+.fi-ta {
+    background: var(--glass-light-bg-strong);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--glass-light-border);
+    border-radius: var(--radius-xl);
+    box-shadow: none;
+}
+
+.dark .fi-section,
+.dark .fi-wi-stats-overview-stat,
+.dark .fi-ta {
+    background: var(--glass-dark-bg-strong);
+    border-color: var(--glass-dark-border);
+}
+
+.fi-wi-stats-overview-stat {
+    transition: transform 280ms var(--ease-apple),
+        background-color 280ms var(--ease-apple),
+        border-color 280ms var(--ease-apple);
+}
+
+.fi-wi-stats-overview-stat:hover {
+    transform: translateY(-2px);
+    border-color: var(--glass-light-border-strong);
+}
+
+.dark .fi-wi-stats-overview-stat:hover {
+    border-color: var(--glass-dark-border-strong);
+}
+
+.fi-wi-stats-overview-stat-value {
+    letter-spacing: var(--tracking-tighter);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.fi-wi-stats-overview-stat-label {
+    letter-spacing: var(--tracking-tight);
+    font-weight: 500;
+}
+
+.fi-input-wrp {
+    background: var(--glass-light-bg);
+    border-color: var(--glass-light-border);
+    backdrop-filter: blur(8px) saturate(180%);
+    -webkit-backdrop-filter: blur(8px) saturate(180%);
+}
+
+.fi-input-wrp:hover {
+    border-color: var(--glass-light-border-strong);
+}
+
+.fi-input-wrp:focus-within {
+    box-shadow:
+        0 0 0 3px rgb(from var(--primary-600) r g b / 0.18);
+}
+
+.dark .fi-input-wrp {
+    background: var(--glass-dark-bg);
+    border-color: var(--glass-dark-border);
+}
+
+.dark .fi-input-wrp:hover {
+    border-color: var(--glass-dark-border-strong);
+}
+
+/* =============================================================================
+ * Buttons.
+ * =============================================================================*/
+
+.fi-btn {
+    transition: transform 220ms var(--ease-apple),
+        background-color 220ms var(--ease-apple);
+}
+
+.fi-btn:active:not(:disabled):not([aria-disabled='true']) {
+    transform: scale(0.97);
+}
+
+.fi-btn:focus-visible {
+    outline-offset: 3px;
+}
+
+/* =============================================================================
+ * Typography polish.
+ * =============================================================================*/
+
+.fi-header-heading,
+.fi-section-header-heading {
+    letter-spacing: var(--tracking-tighter);
+    font-weight: 600;
+}
+
+.fi-header-subheading,
+.fi-section-header-description {
+    letter-spacing: var(--tracking-tight);
+}
+
+/* =============================================================================
+ * Page entry animation.
+ * =============================================================================*/
+
+.fi-page {
+    animation: adminos-page-in 320ms var(--ease-apple) both;
+    background: transparent;
+}
+
+@keyframes adminos-page-in {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =============================================================================
+ * Footer.
+ * =============================================================================*/
+
+.fi-footer {
+    margin-top: 1.5rem;
+    background: transparent;
+    border-top: 1px solid var(--glass-light-border);
+}
+
+.dark .fi-footer {
+    border-top-color: var(--glass-dark-border);
+}
+
+/* =============================================================================
+ * Scheme picker — 5-card grid with full-width swatch headers.
+ * Heavy override of Filament's <Radio> rendering: hide native input,
+ * promote each label to a clickable card.
+ * =============================================================================*/
+
+.adminos-scheme-radio-grid.fi-fo-radio {
+    gap: 0.875rem;
+}
+
+.adminos-scheme-radio-grid .fi-fo-radio-label {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0;
+    cursor: pointer;
+    border: 1.5px solid var(--glass-light-border);
+    border-radius: var(--radius-lg);
+    background: var(--glass-light-bg);
+    overflow: hidden;
+    gap: 0;
+    transition: transform 220ms var(--ease-apple),
+        border-color 220ms var(--ease-apple),
+        box-shadow 220ms var(--ease-apple);
+}
+
+.dark .adminos-scheme-radio-grid .fi-fo-radio-label {
+    border-color: var(--glass-dark-border);
+    background: var(--glass-dark-bg);
+}
+
+.adminos-scheme-radio-grid .fi-fo-radio-label:hover {
+    transform: translateY(-2px);
+    border-color: var(--glass-light-border-strong);
+    box-shadow: var(--shadow-md);
+}
+
+.dark .adminos-scheme-radio-grid .fi-fo-radio-label:hover {
+    border-color: var(--glass-dark-border-strong);
+}
+
+.adminos-scheme-radio-grid .fi-fo-radio-label:has(input:checked) {
+    border-color: var(--primary-600);
+    box-shadow: 0 0 0 3px rgb(from var(--primary-600) r g b / 0.18);
+    transform: translateY(-2px);
+}
+
+.adminos-scheme-radio-grid input.fi-radio-input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.adminos-scheme-radio-grid .fi-fo-radio-label-text {
+    margin: 0;
+    width: 100%;
+}
+
+.adminos-scheme-radio-grid .fi-fo-radio-label-text p {
+    margin: 0;
+}
+
+/* The HtmlString swatch+label that comes back from schemeOptions() */
+.adminos-scheme-radio-grid .adminos-scheme-option {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0;
+}
+
+.adminos-scheme-radio-grid .adminos-scheme-option__swatch {
+    width: 100%;
+    height: 88px;
+    border-radius: 0;
+    box-shadow: inset 0 -1px 0 rgba(15, 23, 42, 0.06);
+}
+
+.dark .adminos-scheme-radio-grid .adminos-scheme-option__swatch {
+    box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.adminos-scheme-radio-grid .adminos-scheme-option__label {
+    padding: 0.75rem 0.875rem;
+    text-align: center;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: var(--tracking-tight);
+}
+
+/* =============================================================================
+ * File upload — minimalist dashed dropzone, outline CTA, drag-over feedback.
+ * Filament 4's file upload is FilePond under the hood.
+ * =============================================================================*/
+
+/* Kill every default FilePond layer shadow/background — they were stacking
+   into a second visible "border" on top of our dashed frame. Only one frame:
+   the .filepond--panel-root dashed outline below. */
+.adminos-file-upload .filepond--panel,
+.adminos-file-upload .filepond--panel-top,
+.adminos-file-upload .filepond--panel-center,
+.adminos-file-upload .filepond--panel-bottom {
+    box-shadow: none !important;
+    background: transparent !important;
+    border: none !important;
+}
+
+.adminos-file-upload .filepond--root {
+    margin: 0;
+    min-height: 5rem;
+}
+
+/* Dashed border ONLY — no fill, fully transparent over the body gradient. */
+.adminos-file-upload .filepond--panel-root {
+    border-radius: var(--radius-lg);
+    border: 1.5px dashed var(--glass-light-border-strong);
+    background: transparent !important;
+    box-shadow: none !important;
+    transition: border-color 220ms var(--ease-apple);
+}
+
+.dark .adminos-file-upload .filepond--panel-root {
+    border-color: var(--glass-dark-border-strong);
+}
+
+.adminos-file-upload .filepond--root:hover .filepond--panel-root {
+    border-color: var(--primary-500);
+}
+
+/* Drag-over: brand-coloured dashed border, still no fill. */
+.adminos-file-upload .filepond--hopper[data-hopper-state='drag-over'] .filepond--panel-root,
+.adminos-file-upload .filepond--root[data-hopper-state='drag-over'] .filepond--panel-root {
+    border-color: var(--primary-500);
+    border-style: dashed;
+    background: transparent !important;
+}
+
+/* CTA "Nahrát" — outline pill, primary border + primary text + + icon prefix.
+   Hover fills with subtle primary tint, active scales down. */
+.adminos-file-upload .filepond--label-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.4rem 0.9rem;
+    margin-top: 0.625rem;
+    border: 1.5px solid var(--primary-600);
+    border-radius: var(--radius-md);
+    background: transparent;
+    color: var(--primary-600);
+    font-weight: 600;
+    font-size: 0.8125rem;
+    text-decoration: none;
+    box-shadow: none;
+    transition: background 220ms var(--ease-apple),
+        border-color 220ms var(--ease-apple),
+        transform 220ms var(--ease-apple);
+}
+
+.adminos-file-upload .filepond--label-action::before {
+    content: '';
+    display: inline-block;
+    width: 0.8125rem;
+    height: 0.8125rem;
+    flex: none;
+    background-color: currentColor;
+    -webkit-mask-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2.5' stroke='black'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M12 4.5v15m7.5-7.5h-15' /%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2.5' stroke='black'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M12 4.5v15m7.5-7.5h-15' /%3E%3C/svg%3E");
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+}
+
+.adminos-file-upload .filepond--label-action:hover {
+    background: rgb(from var(--primary-600) r g b / 0.08);
+    border-color: var(--primary-700);
+    color: var(--primary-700);
+}
+
+.adminos-file-upload .filepond--label-action:active {
+    transform: scale(0.97);
+}
+
+.dark .adminos-file-upload .filepond--label-action {
+    border-color: var(--primary-400);
+    color: var(--primary-300);
+}
+
+.dark .adminos-file-upload .filepond--label-action:hover {
+    background: rgb(from var(--primary-400) r g b / 0.12);
+    border-color: var(--primary-300);
+    color: var(--primary-200);
+}
+
+/* Drop-label centred both axes via flex; padding equal top/bottom = vertical centre. */
+.adminos-file-upload .filepond--drop-label {
+    inset: 0;
+    padding: 0 1.25rem !important;
+    color: rgb(115 115 115); /* neutral-500 */
+    font-size: 0.875rem;
+}
+
+.dark .adminos-file-upload .filepond--drop-label {
+    color: rgb(163 163 163); /* neutral-400 */
+}
+
+/* FilePond renders the drop-label with a nested <label> wrapper around copy + CTA.
+   Both layers flex-center for single- and multi-line cases. */
+.adminos-file-upload .filepond--drop-label,
+.adminos-file-upload .filepond--drop-label > label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+/* Reset CTA's own top-margin — gap above handles spacing now. */
+.adminos-file-upload .filepond--label-action {
+    margin-top: 0;
+}
+
+/* =============================================================================
+ * Helper text with question-mark icon — dim, smaller, top-aligned for
+ * multi-line copy so the icon hugs the first line.
+ * =============================================================================*/
+
+.adminos-helper {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 0.375rem;
+    color: rgb(115 115 115); /* neutral-500 — hue 0, no slate-blue tint */
+    font-size: 0.75rem;
+    font-weight: 400;
+    line-height: 1.45;
+}
+
+.dark .adminos-helper {
+    color: rgb(163 163 163); /* neutral-400 */
+}
+
+.adminos-helper__icon {
+    width: 0.875rem;
+    height: 0.875rem;
+    flex: none;
+    opacity: 0.85;
+    margin-top: 0.125rem; /* nudges icon to align with first line baseline */
+}
+
+/* =============================================================================
+ * Reduced motion.
+ * =============================================================================*/
+
+@media (prefers-reduced-motion: reduce) {
+    .fi-page,
+    .fi-wi-stats-overview-stat,
+    .fi-btn,
+    .fi-sidebar-item-btn,
+    .fi-link,
+    .fi-input-wrp,
+    .fi-topbar-collapse-sidebar-btn-ctn .fi-icon-btn,
+    .adminos-topbar-widget,
+    .adminos-user-display {
+        animation: none !important;
+        transition: none !important;
+    }
+}

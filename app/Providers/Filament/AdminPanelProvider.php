@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use Adminos\Modules\Feedmanager\Filament\FeedmanagerPlugin;
 use App\Filament\Widgets\DevStatsWidget;
 use App\Http\Middleware\SetApplicationLocale;
 use App\Models\Setting;
@@ -62,6 +63,9 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
                 DevStatsWidget::class,
+            ])
+            ->plugins([
+                FeedmanagerPlugin::make(),
             ])
             ->renderHook(
                 PanelsRenderHook::TOPBAR_LOGO_AFTER,

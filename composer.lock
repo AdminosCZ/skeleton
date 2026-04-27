@@ -4,15 +4,15 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ffaa75610a9e9dba53584414597366ec",
+    "content-hash": "f5d3a494d45110a14fba4c40acd846fb",
     "packages": [
         {
             "name": "adminos/core",
-            "version": "dev-feat/admin-branding",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "../core",
-                "reference": "205792acf4643a0174611c998963b7782bcb2ab3"
+                "reference": "e61cfc93da8c3ae4c26cab228bc2cc89cc034b58"
             },
             "require": {
                 "illuminate/contracts": "^13.0",
@@ -25,6 +25,9 @@
             },
             "type": "library",
             "extra": {
+                "branch-alias": {
+                    "dev-main": "0.1.x-dev"
+                },
                 "laravel": {
                     "providers": [
                         "Adminos\\Core\\AdminosCoreServiceProvider"

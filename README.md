@@ -1,58 +1,66 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# ADMINOS Skeleton
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Starter Laravel + Filament template for client projects built on the ADMINOS platform.
 
-## About Laravel
+## What you get out of the box
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Laravel 13 + Filament 4 admin panel at `/admin`
+- Apple-vibe theme with five primary colour schemes (modrá, zelená, červená, magenta, černá), per-client logo / favicon upload, dark mode
+- CZ / SK / EN localisation with role-gated admin language switcher
+- Profile page with avatar upload
+- Dynamic gradient background, sticky topbar, collapsible sidebar
+- `adminos/core` plugin loader pre-wired — manifest-based plugin discovery from `composer.json > extra.adminos` works out of the box
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
-
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## Creating a new client project
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+composer create-project adminos/skeleton my-client
+cd my-client
+composer setup
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+`composer setup` runs the canonical first-time bootstrap (install, copy `.env`, key generation, migrations, npm install, asset build).
 
-## Contributing
+Then visit `http://my-client.test/admin` (or whichever URL your local dev environment has parked the directory at — see [Herd](https://herd.laravel.com/) or `php artisan serve`).
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Adding ADMINOS modules
 
-## Code of Conduct
+Each module is a separate composer package under the `adminos/` vendor:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+composer require adminos/feedmanager
+php artisan migrate
+```
 
-## Security Vulnerabilities
+Modules auto-register through `extra.adminos` manifest discovery; no manual provider wiring required.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Customising for the client
+
+Override defaults without forking:
+
+- `config/client.php` — config overrides
+- `app/Custom/` — client-specific Filament pages, widgets, event listeners
+- DI bindings in a custom service provider — swap interface implementations declared by ADMINOS modules
+
+**Never edit code inside `vendor/adminos/`.** Updates to ADMINOS modules will overwrite changes. If a module doesn't expose the hook you need, raise an issue on `AdminosCZ/adminos` so the extension point can be added upstream.
+
+## Requirements
+
+- PHP 8.3+
+- Node.js 20+
+- A database (SQLite / MySQL / PostgreSQL)
+
+## Status
+
+This is a pre-stable preview. Public APIs marked `@api` follow SemVer; everything else may change without notice between `0.x` releases.
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Proprietary. See [LICENSE](LICENSE). Copyright © Rekoj.cz.
+
+## Issues and pull requests
+
+This repository is a **read-only mirror** generated from the [`AdminosCZ/adminos`](https://github.com/AdminosCZ/adminos) monorepo by a subtree-split GitHub Action. Pull requests and issues opened here cannot be merged. File them against the monorepo instead:
+
+- Issues: https://github.com/AdminosCZ/adminos/issues
+- Pull requests: https://github.com/AdminosCZ/adminos/pulls

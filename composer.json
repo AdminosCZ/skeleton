@@ -1,13 +1,18 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/laravel",
+    "name": "adminos/skeleton",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
-    "license": "MIT",
+    "description": "Starter Laravel + Filament template for ADMINOS client projects. Use via 'composer create-project adminos/skeleton my-client'.",
+    "keywords": ["adminos", "laravel", "filament", "admin", "skeleton"],
+    "license": "proprietary",
+    "homepage": "https://adminos.cz",
+    "support": {
+        "issues": "https://github.com/AdminosCZ/adminos/issues",
+        "source": "https://github.com/AdminosCZ/skeleton"
+    },
     "require": {
         "php": "^8.3",
-        "adminos/core": "*@dev",
+        "adminos/core": "^0.1.0-alpha.1@dev",
         "filament/filament": "^4.0",
         "laravel/framework": "^13.0",
         "laravel/tinker": "^3.0"

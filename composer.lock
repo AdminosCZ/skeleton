@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7475ff1698eb0f7429a5817426ccfa86",
+    "content-hash": "7ef4f8b58fe8fdd18f73be73f97913ed",
     "packages": [
         {
             "name": "adminos/core",
@@ -112,6 +112,67 @@
             "support": {
                 "issues": "https://github.com/AdminosCZ/adminos/issues",
                 "source": "https://github.com/AdminosCZ/feedmanager"
+            },
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "adminos/feedmanager-pro",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "../feedmanager-pro",
+                "reference": "2fdfda26cd7075363a1b1ef7e4f158e937fffbf4"
+            },
+            "require": {
+                "adminos/core": "^0.1.0-alpha.2@dev",
+                "adminos/feedmanager": "^0.1.0-alpha.1@dev",
+                "filament/filament": "^4.0",
+                "illuminate/contracts": "^13.0",
+                "illuminate/database": "^13.0",
+                "illuminate/support": "^13.0",
+                "php": "^8.3"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^11.0",
+                "phpunit/phpunit": "^12.5"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "0.1.x-dev"
+                },
+                "adminos": {
+                    "id": "feedmanager-pro",
+                    "name": "Feed Manager PRO",
+                    "description": "B2B partner feeds extension for Feed Manager."
+                },
+                "laravel": {
+                    "providers": [
+                        "Adminos\\Modules\\FeedmanagerPro\\FeedmanagerProServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Adminos\\Modules\\FeedmanagerPro\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Adminos\\Modules\\FeedmanagerPro\\Tests\\": "tests/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "description": "Pro extension for adminos/feedmanager — adds B2B partner feeds with per-partner UUID tokens, rate limiting, download logs and a Filament admin UI for partner management.",
+            "homepage": "https://adminos.cz",
+            "support": {
+                "issues": "https://github.com/AdminosCZ/adminos/issues",
+                "source": "https://github.com/AdminosCZ/feedmanager-pro"
             },
             "transport-options": {
                 "symlink": true,
@@ -12120,7 +12181,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "adminos/core": 20,
-        "adminos/feedmanager": 20
+        "adminos/feedmanager": 20,
+        "adminos/feedmanager-pro": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

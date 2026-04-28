@@ -14,6 +14,7 @@
         "php": "^8.3",
         "adminos/core": "^0.1.0-alpha.1@dev",
         "adminos/feedmanager": "^0.1.0-alpha.1@dev",
+        "adminos/feedmanager-pro": "^0.1.0-alpha.1@dev",
         "filament/filament": "^4.0",
         "laravel/framework": "^13.0",
         "laravel/tinker": "^3.0"
@@ -29,6 +30,13 @@
         {
             "type": "path",
             "url": "../feedmanager",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "../feedmanager-pro",
             "options": {
                 "symlink": true
             }

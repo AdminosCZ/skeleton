@@ -410,10 +410,14 @@ body:has(.fi-sidebar.fi-sidebar-open:hover) .fi-topbar-collapse-sidebar-btn-ctn,
 }
 
 /* =============================================================================
- * Sections / cards / stats / tables / inputs — liquid glass.
+ * Cards / stats / tables — liquid glass.
+ *
+ * Form sections (.fi-section) are intentionally kept transparent — heading
+ * + description + fields read as one stacked column without a card chrome
+ * around them. The glass treatment stays on stat tiles and tables where
+ * the boundary actually conveys meaning.
  * =============================================================================*/
 
-.fi-section,
 .fi-wi-stats-overview-stat,
 .fi-ta {
     background: var(--glass-light-bg-strong);
@@ -424,11 +428,41 @@ body:has(.fi-sidebar.fi-sidebar-open:hover) .fi-topbar-collapse-sidebar-btn-ctn,
     box-shadow: none;
 }
 
-.dark .fi-section,
 .dark .fi-wi-stats-overview-stat,
 .dark .fi-ta {
     background: var(--glass-dark-bg-strong);
     border-color: var(--glass-dark-border);
+}
+
+/* Form sections: no background, no border, just spacing. Heading +
+   description + fields stack vertically with comfortable rhythm. */
+.fi-section {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    padding: 0 !important;
+}
+
+.fi-section + .fi-section {
+    margin-top: 1.5rem;
+}
+
+.fi-section-header {
+    padding-block-end: 0.75rem !important;
+    padding-inline: 0 !important;
+    border-block-end: 1px solid var(--glass-light-border);
+    margin-block-end: 1.25rem;
+}
+
+.dark .fi-section-header {
+    border-block-end-color: var(--glass-dark-border);
+}
+
+.fi-section-content-ctn,
+.fi-section-content {
+    padding: 0 !important;
 }
 
 .fi-wi-stats-overview-stat {

@@ -79,6 +79,55 @@
 }
 
 /* =============================================================================
+ * Inline-label TOGGLE — switch úplně vpravo, helper text pod label vlevo.
+ *
+ * Filament's helperText() routes přes belowContent (vedle togglu vpravo). Pro
+ * iOS/Settings-style layout chceme toggle jako kompaktní indikátor vpravo a
+ * popis pod label vlevo.
+ *
+ * `:has(.fi-fo-toggle)` zúží scope jen na toggle field-wrappery (inputy
+ * s inlineLabel zůstávají standardní layout). `display: contents` na
+ * fi-fo-field-content-col vystaví toggle a helper sibling jako přímé
+ * grid children, takže je můžeme placnout do správných buňek.
+ * =============================================================================*/
+
+.fi-fo-field-wrp.fi-fo-field-has-inline-label:has(.fi-fo-toggle) {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    align-items: center;
+    column-gap: 1.25rem;
+}
+
+.fi-fo-field-wrp.fi-fo-field-has-inline-label:has(.fi-fo-toggle)
+    > .fi-fo-field-label-col {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: center;
+}
+
+.fi-fo-field-wrp.fi-fo-field-has-inline-label:has(.fi-fo-toggle)
+    > .fi-fo-field-content-col {
+    display: contents;
+}
+
+.fi-fo-field-wrp.fi-fo-field-has-inline-label:has(.fi-fo-toggle)
+    > .fi-fo-field-content-col > .fi-fo-toggle {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: center;
+    justify-self: end;
+}
+
+.fi-fo-field-wrp.fi-fo-field-has-inline-label:has(.fi-fo-toggle)
+    > .fi-fo-field-content-col > .fi-sc {
+    grid-column: 1;
+    grid-row: 2;
+    margin-top: 0.25rem;
+    align-self: start;
+}
+
+/* =============================================================================
  * SEMANTIC COLOUR TOKENS — danger / success / warning
  *
  * Bez tohoto bloku Filament defaultuje semantické barvy na primary, takže

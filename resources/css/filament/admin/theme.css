@@ -91,7 +91,7 @@
  * grid children, takže je můžeme placnout do správných buňek.
  * =============================================================================*/
 
-.fi-fo-field-wrp.fi-fo-field-has-inline-label:has(.fi-fo-toggle) {
+.fi-fo-field-has-inline-label:has(.fi-fo-toggle) {
     display: grid;
     grid-template-columns: 1fr auto;
     grid-template-rows: auto auto;
@@ -99,19 +99,19 @@
     column-gap: 1.25rem;
 }
 
-.fi-fo-field-wrp.fi-fo-field-has-inline-label:has(.fi-fo-toggle)
+.fi-fo-field-has-inline-label:has(.fi-fo-toggle)
     > .fi-fo-field-label-col {
     grid-column: 1;
     grid-row: 1;
     align-self: center;
 }
 
-.fi-fo-field-wrp.fi-fo-field-has-inline-label:has(.fi-fo-toggle)
+.fi-fo-field-has-inline-label:has(.fi-fo-toggle)
     > .fi-fo-field-content-col {
     display: contents;
 }
 
-.fi-fo-field-wrp.fi-fo-field-has-inline-label:has(.fi-fo-toggle)
+.fi-fo-field-has-inline-label:has(.fi-fo-toggle)
     > .fi-fo-field-content-col > .fi-fo-toggle {
     grid-column: 2;
     grid-row: 1 / span 2;
@@ -119,7 +119,7 @@
     justify-self: end;
 }
 
-.fi-fo-field-wrp.fi-fo-field-has-inline-label:has(.fi-fo-toggle)
+.fi-fo-field-has-inline-label:has(.fi-fo-toggle)
     > .fi-fo-field-content-col > .fi-sc {
     grid-column: 1;
     grid-row: 2;
